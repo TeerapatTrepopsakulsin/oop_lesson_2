@@ -15,6 +15,23 @@ with open(os.path.join(__location__, 'Countries.csv')) as f:
     for r in rows:
         countries.append(dict(r))
 
+players = []
+with open(os.path.join(__location__, 'Players.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        countries.append(dict(r))
+
+teams = []
+with open(os.path.join(__location__, 'Teams.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        countries.append(dict(r))
+
+titanic = []
+with open(os.path.join(__location__, 'Titanic.csv.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        countries.append(dict(r))
 class DB:
     def __init__(self):
         self.database = []
@@ -121,3 +138,8 @@ for item in my_table2.table:
     if len(my_table1_filtered.table) >= 1:
         print(item['country'], my_table1_filtered.aggregate(lambda x: min(x), 'latitude'), my_table1_filtered.aggregate(lambda x: max(x), 'latitude'))
 print()
+print('---Week12---')
+print()
+table4 = Table('players', players)
+table5 = Table('teams', teams)
+table6 = Table('titanic', titanic)
