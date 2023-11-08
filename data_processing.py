@@ -19,19 +19,19 @@ players = []
 with open(os.path.join(__location__, 'Players.csv')) as f:
     rows = csv.DictReader(f)
     for r in rows:
-        countries.append(dict(r))
+        players.append(dict(r))
 
 teams = []
 with open(os.path.join(__location__, 'Teams.csv')) as f:
     rows = csv.DictReader(f)
     for r in rows:
-        countries.append(dict(r))
+        teams.append(dict(r))
 
 titanic = []
-with open(os.path.join(__location__, 'Titanic.csv.csv')) as f:
+with open(os.path.join(__location__, 'Titanic.csv')) as f:
     rows = csv.DictReader(f)
     for r in rows:
-        countries.append(dict(r))
+        titanic.append(dict(r))
 class DB:
     def __init__(self):
         self.database = []
@@ -95,7 +95,7 @@ my_DB.insert(table1)
 my_DB.insert(table2)
 my_table1 = my_DB.search('cities')
 
-print("Test filter: only filtering out cities in Italy") 
+print("Test filter: only filtering out cities in Italy")
 my_table1_filtered = my_table1.filter(lambda x: x['country'] == 'Italy')
 print(my_table1_filtered)
 print()
@@ -141,5 +141,29 @@ print()
 print('---Week12---')
 print()
 table4 = Table('players', players)
+# print(table4.table)
 table5 = Table('teams', teams)
+# print(table5.table)
 table6 = Table('titanic', titanic)
+table7 = table4.join(table5, 'team')
+# print(table7.table)
+print('Player on a team with “ia” in the team name played less than 200 minutes and made more than 100 passes:')
+table7_filtered = table7.filter(lambda x: int(x['minutes']) < 200).filter(lambda x: int(x['passes']) > 100).filter(lambda x: 'ia' in x['team'])
+for player in table7_filtered.table:
+    print(player['surname'], player['team'], player['position'])
+print()
+
+print('The average number of games played for teams ranking below 10 versus teams ranking above or equal 10:')
+table5_filtered_top9 = table5.filter(lambda x: int(x['ranking']) < 10)
+table5_filtered_10below = table5.filter(lambda x: int(x['ranking']) >= 10)
+print('ranking below 10:', table5_filtered_top9.aggregate(lambda x: int(sum(x)/len(table5_filtered_top9.table)), 'games'))
+print('ranking above or equal 10:', table5_filtered_10below.aggregate(lambda x: int(sum(x)/len(table5_filtered_10below.table)), 'games'))
+print()
+
+print('The average number of passes made by forwards versus by midfielders:')
+table4_filtered_mf = table4.filter(lambda x: x['position'] == 'midfielder')
+table4_filtered_fw = table4.filter(lambda x: x['position'] == 'forward')
+print('midfielder:', table4_filtered_mf.aggregate(lambda x: int(sum(x)/len(table4_filtered_mf.table)), 'passes'))
+print('forward:', table4_filtered_fw.aggregate(lambda x: int(sum(x)/len(table4_filtered_fw.table)), 'passes'))
+print()
+
