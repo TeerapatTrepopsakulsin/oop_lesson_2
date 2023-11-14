@@ -183,4 +183,8 @@ table6_filtered_female_survived = table6_filtered_female.filter(lambda x: x['sur
 print('Male:', len(table6_filtered_male_survived.table)/len(table6_filtered_male.table)*100, '%')
 print('Female:', len(table6_filtered_female_survived.table)/len(table6_filtered_female.table)*100, '%')
 print()
-print('---Task2---')
+print('---Task3---')
+
+print('The total number of male passengers embarked at Southampton')
+table6_filtered_male_southampton = table6_filtered_male.filter(lambda x: x['embarked'] == 'Southampton')
+print(len(table6_filtered_male_southampton.table))
