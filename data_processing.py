@@ -104,7 +104,6 @@ class Table:
 
     def pivot_table(self, keys_to_pivot_list, keys_to_aggregate_list, aggregate_func_list):
 
-        # First create a list of unique values for each key
         unique_values_list = []
         for key in keys_to_pivot_list:
             mini = []
@@ -113,24 +112,9 @@ class Table:
                     mini.append(data[key])
             unique_values_list.append(mini)
 
-        # Here is an example of unique_values_list for
-        # keys_to_pivot_list = ['embarked', 'gender', 'class']
-        # unique_values_list = [['Southampton', 'Cherbourg', 'Queenstown'], ['M', 'F'], ['3', '2','1']]
-
-        # Get the combination of unique_values_list
-        # You will make use of the function you implemented in Task 2
-
         import combination_gen
         gen_comb_list = combination_gen.gen_comb_list(unique_values_list)
-        # code that makes a call to combination_gen.gen_comb_list
 
-        # Example output:
-        # [['Southampton', 'M', '3'],
-        #  ['Cherbourg', 'M', '3'],
-        #  ...
-        #  ['Queenstown', 'F', '1']]
-
-        # code that filters each combination
         pivot_table = []
         for comb_list in gen_comb_list:
             filtered = copy.deepcopy(self)
@@ -142,10 +126,6 @@ class Table:
                 wanted_val_list.append(wanted_val)
 
             pivot_table.append([comb_list, wanted_val_list])
-        # for each filter table applies the relevant aggregate functions
-        # to keys to aggregate
-        # the aggregate functions is listed in aggregate_func_list
-        # to keys to aggregate is listed in keys_to_aggregate_list
 
         return pivot_table
 
@@ -248,6 +228,22 @@ print('---Task3---')
 
 my_DB.insert(table6)
 my_table6 = my_DB.search('titanic')
-my_pivot = my_table6.pivot_table(['embarked', 'gender', 'class'], ['fare', 'fare', 'fare', 'last'], [lambda x: min(x), lambda x: max(x), lambda x: sum(x)/len(x), lambda x: len(x)])
-print(my_pivot)
-# print(my_table6.filter(lambda x: x['embarked'] == 'Southampton').filter(lambda x: x['gender'] == 'M').filter(lambda x: x['class'] == '3').aggregate(lambda x: len(x), 'last'))
+my_pivot_0 = my_table6.pivot_table(['embarked', 'gender', 'class'], ['fare', 'fare', 'fare', 'last'], [lambda x: min(x), lambda x: max(x), lambda x: sum(x)/len(x), lambda x: len(x)])
+print('Pivot table example:')
+print(my_pivot_0)
+print()
+
+my_pivot_1 = table4.pivot_table(['position'], ['passes', 'shots'], [lambda x: sum(x)/len(x), lambda x: sum(x)/len(x)])
+print('Pivot table test case#1')
+print(my_pivot_1)
+print()
+
+my_pivot_2 = table2.pivot_table(['coastline', 'EU'], ['temperature', 'latitude', 'latitude'], [lambda x: sum(x)/len(x), lambda x: min(x), lambda x: max(x)])
+print('Pivot table test case#2')
+print(my_pivot_2)
+print()
+
+my_pivot_3 = table6.pivot_table(['class','gender','survived'],['survived','fare'],[lambda x: len(x),lambda x: sum(x)/len(x)])
+print('Pivot table test case#3')
+print(my_pivot_3)
+print()
