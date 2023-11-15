@@ -132,14 +132,13 @@ class Table:
 
         # code that filters each combination
         pivot_table = []
-        filtered = copy.deepcopy(self)
         for comb_list in gen_comb_list:
+            filtered = copy.deepcopy(self)
             for comb in comb_list:
-                filtered = self.filter(lambda x: x[keys_to_pivot_list[comb_list.index(comb)]] == comb)
+                filtered = filtered.filter(lambda x: x[keys_to_pivot_list[comb_list.index(comb)]] == comb)
             wanted_val_list = []
             for agg_func in aggregate_func_list:
                 wanted_val = filtered.aggregate(agg_func, keys_to_aggregate_list[aggregate_func_list.index(agg_func)])
-                print(wanted_val)
                 wanted_val_list.append(wanted_val)
 
             pivot_table.append([comb_list, wanted_val_list])
@@ -251,4 +250,4 @@ my_DB.insert(table6)
 my_table6 = my_DB.search('titanic')
 my_pivot = my_table6.pivot_table(['embarked', 'gender', 'class'], ['fare', 'fare', 'fare', 'last'], [lambda x: min(x), lambda x: max(x), lambda x: sum(x)/len(x), lambda x: len(x)])
 print(my_pivot)
-print(my_table6.filter(lambda x: x['embarked'] == 'Southampton').filter(lambda x: x['gender'] == 'M').filter(lambda x: x['class'] == '3').aggregate(lambda x: len(x), 'last'))
+# print(my_table6.filter(lambda x: x['embarked'] == 'Southampton').filter(lambda x: x['gender'] == 'M').filter(lambda x: x['class'] == '3').aggregate(lambda x: len(x), 'last'))
